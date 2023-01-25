@@ -12,6 +12,7 @@ import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.pdf.handle.ItextDocument;
 import com.pdf.handle.ItextPdfDocument;
+import com.pdf.handle.PDFEventHandler;
 import com.pdf.handle.PdfRender;
 import lombok.Data;
 
@@ -40,7 +41,8 @@ public class Itext7Pdf {
         this.style = new Style();
         this.pageSize = PageSize.A4;
         if (StrUtil.isNotBlank(this.setup.getFont())) {
-            font = PdfFontFactory.createFont(FileUtil.readBytes(this.setup.getFont()), PdfEncodings.IDENTITY_H, true);
+            //font = PdfFontFactory.createFont(FileUtil.readBytes(this.setup.getFont()), PdfEncodings.IDENTITY_H, true);
+            font = PdfFontFactory.createFont(FileUtil.readBytes(this.setup.getFont()), PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED, true);
         } else {
             font = PdfFontFactory.createFont();
         }

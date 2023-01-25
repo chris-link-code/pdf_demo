@@ -1,8 +1,8 @@
 
 package com.pdf.canvas;
 
-import com.itextpdf.kernel.PdfException;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.exceptions.PdfException;
 
 import java.util.HashMap;
 import java.util.Map;
