@@ -14,6 +14,8 @@
         <maven-assembly-plugin.version>3.4.0</maven-assembly-plugin.version>
         <junit-jupiter-api.version>5.9.0</junit-jupiter-api.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <commons.version>4.4</commons.version>
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <lombok.version>1.18.24</lombok.version>
         <logback.version>1.4.5</logback.version>
@@ -59,6 +61,16 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -85,11 +97,6 @@
             <artifactId>pdfa</artifactId>
             <version>${itext.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>pdftest</artifactId>
-            <version>${itext.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>font-asian</artifactId>
@@ -114,7 +121,7 @@
     target会生成两个jar包，original开头的是不包含依赖的包
     -->
     <build>
-        <finalName>lock</finalName>
+        <finalName>pdf</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

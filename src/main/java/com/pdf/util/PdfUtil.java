@@ -13,6 +13,8 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import com.pdf.bean.Itext7Pdf;
 import com.pdf.bean.PdfSetup;
+import com.pdf.canvas.Color;
+import com.pdf.canvas.Header;
 import com.pdf.handle.PdfRenderHandle;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,16 +30,16 @@ import java.io.IOException;
 @Slf4j
 public class PdfUtil {
 
-    public void createPdf() throws IOException {
+    public static void createPdf() throws IOException {
         String output = System.getProperty("user.dir") + "\\test.pdf";
         String font = System.getProperty("user.dir") + "\\font.ttf";
         log.info("output: {}", output);
         log.info("font: {}", font);
 
         PdfSetup setup = new PdfSetup(output, font);
-        setup.setDirectory(true);
-        setup.setCover(true);
-        setup.setFooter(true);
+        setup.setDirectory(false);
+        setup.setCover(false);
+        setup.setFooter(false);
         setup.setHeader(true);
         Itext7Pdf.getPdf(new PdfRenderHandle(), setup).write();
     }
@@ -63,18 +65,21 @@ public class PdfUtil {
             text = text.replaceAll(":", ":\r\n");
             text = text.replaceAll("、", ", ");
             text = text.replaceAll("\\.", ".\r\n");
-            log.info(text);
+            //log.info(text);
 
             writer = new PdfWriter(output);
             PdfDocument pdfDocument = new PdfDocument(writer);
             document = new Document(pdfDocument);
             document.setFontSize(16);
             document.add(new Paragraph(text));
+            addHeader(document, pdfName);
 
             //TODO 页眉
 
             //addPageHeader(document, PageSize.A4.getHeight(), pdfName);
-            //addPageHeader(document, 6000, pdfName);
+
+            //PdfPage pdfPage = new PdfPage(pdfDocument, PageSize.A4);
+            // PDFCanvas headerCanvas = new PDFCanvas(pdfPage);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -123,4 +128,80 @@ public class PdfUtil {
         document.add(table);
     }
 
+    private static void addHeader(Document document, String header) {
+        Table table = new Table(1);
+        table.setBorder(Border.NO_BORDER);
+        Cell cell = new Cell();
+        cell.setTextAlignment(TextAlignment.CENTER);
+        Paragraph paragraph = new Paragraph(header);
+        cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+        //paragraph.setBackgroundColor(Color.parse("#FFFFFF"));
+        paragraph.setFontColor(Color.parse("#000000"));
+        cell.add(paragraph);
+        table.addCell(cell);
+        float width = PageSize.A4.getWidth();
+        float height = PageSize.A4.getHeight();
+        table.setHeight(40);
+        table.setWidth(width);
+        table.setFixedPosition(0, height, width);
+        table.setFixedLayout();
+
+        /*header.layout(table);
+
+
+        //创建字体
+        //Font textFont = new Font(BASE_FONT, 10f);
+        float width = PageSize.A4.getWidth() - 60;
+        //表格 一行两列
+        Table table = new Table(2);
+        table.setWidth(width);
+
+        //logo
+        //Image logo = new Image(ImageDataFactory.create(logoPath));
+        table.addCell(new Cell().setHeight(40).setBorderTop(Border.NO_BORDER).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER));
+
+        //名称
+        Paragraph nameP = new Paragraph(header);
+        table.addCell(new Cell().add(nameP).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER).setBorderTop(Border.NO_BORDER).setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER));
+
+        //设置表格的位置 页眉处
+        table.setFixedPosition(document.getLeftMargin() - 10, pdfHeight - document.getTopMargin() - 40, table.getWidth());
+        */
+        document.add(table);
+    }
+
+
+    /*public void header(Document document) throws Exception {
+        //PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("HeaderFooter.pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("HeaderFooter"));
+        Rectangle rect = new Rectangle(30, 30, 550, 800);
+        writer.setBoxSize("art", rect);
+        //HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+        //writer.setPageEvent(event);
+        //document.open();
+        document.add(new Paragraph("This is Page One"));
+        //document.newPage();
+        document.add(new Paragraph("This is Page two"));
+        document.close();
+        log.info("Done");
+    }*/
+
+
+    public void header(Header header) {
+        try {
+            Table table = new Table(1);
+            table.setBorder(Border.NO_BORDER);
+            Cell cell = new Cell();
+            cell.setTextAlignment(TextAlignment.CENTER);
+            Paragraph paragraph = new Paragraph("页眉" + header.getPageNumber());
+            cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+            paragraph.setBackgroundColor(Color.parse("#d0d0d0"));
+            cell.add(paragraph);
+            table.addCell(cell);
+            header.layout(table);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//      header.addText(new Text(Point.build(0, 0), "页眉" + header.getPageNumber()).centered());
+    }
 }
