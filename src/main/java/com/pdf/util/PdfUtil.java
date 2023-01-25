@@ -68,6 +68,7 @@ public class PdfUtil {
             writer = new PdfWriter(output);
             PdfDocument pdfDocument = new PdfDocument(writer);
             document = new Document(pdfDocument);
+            document.setFontSize(16);
             document.add(new Paragraph(text));
 
             //TODO 字体放大
