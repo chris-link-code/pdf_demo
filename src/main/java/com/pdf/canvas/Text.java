@@ -1,7 +1,7 @@
 package com.pdf.canvas;
 
-import com.zhipeipt.pdf.emement.Align;
-import com.zhipeipt.pdf.emement.Point;
+import com.pdf.bean.Align;
+import com.pdf.bean.Point;
 import lombok.Data;
 
 @Data
