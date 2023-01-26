@@ -45,10 +45,10 @@ public class PdfUtil {
     }
 
 
-    public static void getPdf(File file) {
+    public static void getPdf(File file,String targetPath) {
         String input = file.getAbsolutePath();
         String pdfName = file.getName().replaceAll(".txt", "");
-        String output = System.getProperty("user.dir") + "\\" + pdfName + ".pdf";
+        String output = targetPath + "\\" + pdfName + ".pdf";
 
         BufferedReader reader = null;
         Document document = null;
@@ -67,6 +67,9 @@ public class PdfUtil {
             text = text.replaceAll("\\.", ".\r\n");
             //log.info(text);
 
+            text = pdfName + "\r\n\r\n" + text;
+            text = text + "\r\n" + pdfName;
+
             writer = new PdfWriter(output);
             PdfDocument pdfDocument = new PdfDocument(writer);
             document = new Document(pdfDocument);
@@ -74,10 +77,7 @@ public class PdfUtil {
             document.add(new Paragraph(text));
             addHeader(document, pdfName);
 
-            //TODO 页眉
-
             //addPageHeader(document, PageSize.A4.getHeight(), pdfName);
-
             //PdfPage pdfPage = new PdfPage(pdfDocument, PageSize.A4);
             // PDFCanvas headerCanvas = new PDFCanvas(pdfPage);
         } catch (Exception e) {
